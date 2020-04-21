@@ -13,7 +13,8 @@ OS_Project
 		|--- (...)
 ```
 * Mỗi người đều có một branch riêng, đừng vội vàng *commit* lên branch **master** mà thay và đó hãy tự up lên branch của mình, thảo luận với người khác, kiểm tra bug rồi hãy *merge* với branch **master**
-
+* Trước khi build, cần install thư viện **readline** bằng dòng lệnh 
+``` sudo apt-get install libreadline-dev ```
 ## Các liên kết ngoài
 [Video](https://www.youtube.com/watch?v=17rJiKRD7mg)
 [Instruction](https://nsl.cs.sfu.ca/teaching/11/300/prj2_shell.html)
