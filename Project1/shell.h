@@ -95,13 +95,13 @@ int undefined_execute(char ** args_normal, int Num_of_CMD){
         break;
 
     case 2:
-        printf("\nList of Commands supported:"
+        printf("List of Commands supported:"
         "\n>hello"
         "\n>cd"
         "\n>exit"
         "\n>all other general commands available in UNIX shell"
         "\n>ONE pipe handling"
-        "\n>improper space handling");
+        "\n>improper space handling\n");
         break;
 
     case 3:
