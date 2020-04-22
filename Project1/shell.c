@@ -6,7 +6,7 @@ int main(void){
     char * args_pipe[MAX_LIST] = {};
     int shouldrun = 1; /* flag to determine when to exit program */
     while (shouldrun) {
-        printf("osh>");
+        printf("osh");
         fflush(stdout);
         /**
         * After reading user input, the steps are:* 
@@ -16,8 +16,7 @@ int main(void){
        if(take_input(input_string) == 0){
            continue;
        }
-
-       shouldrun = osh_execute();
+        
        }
         return 0;
 }

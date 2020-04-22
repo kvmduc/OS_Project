@@ -8,7 +8,7 @@
 #define MAX_LIST 100 /* The maximum length arg */
 
 int take_input(char * input_string){
-    char * buffer_string = readline("\n");
+    char * buffer_string = readline(">>");
     if(strlen( buffer_string )==0){
         return 0;
     }
@@ -47,15 +47,8 @@ void parse_space(char * str_with_space, char ** parsed){
     }
 }
 
-int CmdHandler(char** parsed){
-    int NumOfCmd = 4; // So luong CMD
-    char * ListOfCmd [NumOfCmd];
-    ListOfCmd[0] = "exit"; 
-    ListOfCmd[1] = "cd"; 
-    ListOfCmd[2] = "help"; 
-    ListOfCmd[3] = "pwd"; 
-    
-    return 0;
+void CmdHandler(char** parsed){
+    execvp(parsed[0], parsed);
 }
 
 int input_classification(char * input_string, char ** args_normal, char ** args_pipe){
@@ -68,18 +61,18 @@ int input_classification(char * input_string, char ** args_normal, char ** args_
         return -1;
     }
     
-    if(pipe == 0){
+    else if(pipe == 0){
         parse_space(str_partition[0], args_normal);
+        CmdHandler(args_normal);
     }
 
-    if(pipe == 1){
+    else if(pipe == 1){
         parse_space(str_partition[0], args_normal);
         parse_space(str_partition[1], args_pipe);
+        CmdHandler(args_normal);
+        CmdHandler(args_pipe);
     }
 
-    if(CmdHandler(args_normal)){
-        return 0;
-    }
     else{
         printf("More than one pipeline !!!");
         return pipe;
@@ -89,5 +82,6 @@ int input_classification(char * input_string, char ** args_normal, char ** args_
 
 
 int osh_execute(){
+    
     return 0;
 }
