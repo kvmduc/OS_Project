@@ -21,8 +21,8 @@ int take_input(char * input_string){
         return 0;
     }
     else{
-        //add_history(buffer_string); //Neu ranh thi co the viet mot ham Overload !!!
-        get_History( buffer_string );
+        add_history(buffer_string); //Neu ranh thi co the viet mot ham Overload !!!
+        //add_CMD_to_History( buffer_string );
         strcpy(input_string , buffer_string);
         return 1;
     }
@@ -103,7 +103,8 @@ int undefined_execute(char ** args_normal, int Num_of_CMD){
         "\n>exit"
         "\n>all other general commands available in UNIX shell"
         "\n>ONE pipe handling"
-        "\n>improper space handling\n");
+        "\n>improper space handling\n"
+        "\n>history");
         break;
 
     case 3:
@@ -111,7 +112,7 @@ int undefined_execute(char ** args_normal, int Num_of_CMD){
         break;
 
     case 4:
-        //get_History();
+        //add_CMD_to_History();
         break;
 
     default:
@@ -168,7 +169,7 @@ int input_classification(char * input_string, char ** args_normal, char ** args_
     }
 }
 
-void get_History( char * last_command )
+void add_CMD_to_History( char * last_command )
 {
     char * history[CMD_HISTORY_LIST];
 
@@ -188,13 +189,13 @@ void get_History( char * last_command )
 
     if (CMD_HISTORY_COUNT < CMD_HISTORY_LIST)
     {
-        for (int index = 1; index < CMD_HISTORY_COUNT; index++)
+        for (int index = 1; index <= CMD_HISTORY_COUNT; index++)
         {
             printf("[%d] %c", index, history[index]);
         }
     }
     else{
-        for (int index = 1; index < CMD_HISTORY_LIST; index++)
+        for (int index = 1; index <= CMD_HISTORY_LIST; index++)
         {
             printf("[%d] %c", index, history[index]);
         }
