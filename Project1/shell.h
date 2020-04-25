@@ -9,9 +9,10 @@
 
 #define MAX_LINE 800 /* The maximum length command */
 #define MAX_LIST 100 /* The maximum length arg */
-#define CMD_LIST 4 /* Number of undefined arg */
-
- 
+#define CMD_LIST 5 /* Number of undefined arg */
+#define CMD_HISTORY_LIST 10 /* Maximum numbers of command in history */
+#define FIRST_CMD_HISTORY 1 /**/
+int CMD_HISTORY_COUNT = 1; /* Counting the number of history in the list */
 
 
 int take_input(char * input_string){
@@ -20,7 +21,8 @@ int take_input(char * input_string){
         return 0;
     }
     else{
-        add_history(buffer_string); //Neu ranh thi co the viet mot ham Overload !!!
+        //add_history(buffer_string); //Neu ranh thi co the viet mot ham Overload !!!
+        get_History( buffer_string );
         strcpy(input_string , buffer_string);
         return 1;
     }
@@ -107,6 +109,11 @@ int undefined_execute(char ** args_normal, int Num_of_CMD){
     case 3:
         exit(0);
         break;
+
+    case 4:
+        //get_History();
+        break;
+
     default:
         break;
     }
@@ -120,6 +127,7 @@ int osh_normal_execute(char ** args_normal){
     list_of_cmd[1] = "cd";
     list_of_cmd[2] = "help";
     list_of_cmd[3] = "exit";
+    list_of_cmd[4] = "history";
 
     if(args_normal[0]==NULL){
         return 1; //Command empty;
@@ -157,5 +165,38 @@ int input_classification(char * input_string, char ** args_normal, char ** args_
     else{
         printf("More than one pipeline !!!");
         return pipe;
+    }
+}
+
+void get_History( char * last_command )
+{
+    char * history[CMD_HISTORY_LIST];
+
+    if (CMD_HISTORY_COUNT < CMD_HISTORY_LIST)
+    {
+        history[CMD_HISTORY_COUNT] = last_command;
+        CMD_HISTORY_COUNT = CMD_HISTORY_COUNT + 1;
+    }
+    else {
+        free (history[1]);
+        for (int index = 2; index <= CMD_HISTORY_LIST; index++)
+        {
+            history[index - 1] = history[index];
+        }
+        history[CMD_HISTORY_LIST] = last_command;
+    }
+
+    if (CMD_HISTORY_COUNT < CMD_HISTORY_LIST)
+    {
+        for (int index = 1; index < CMD_HISTORY_COUNT; index++)
+        {
+            printf("[%d] %c", index, history[index]);
+        }
+    }
+    else{
+        for (int index = 1; index < CMD_HISTORY_LIST; index++)
+        {
+            printf("[%d] %c", index, history[index]);
+        }
     }
 }
