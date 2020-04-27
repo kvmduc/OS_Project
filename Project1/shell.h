@@ -22,7 +22,7 @@ int take_input(char * input_string){
     }
     else{
         add_history(buffer_string); //Neu ranh thi co the viet mot ham Overload !!!
-        //add_CMD_to_History( buffer_string );
+        add_CMD_to_History(buffer_string);
         strcpy(input_string , buffer_string);
         return 1;
     }
@@ -169,6 +169,10 @@ int input_classification(char * input_string, char ** args_normal, char ** args_
     }
 }
 
+/*
+    Add the latest command into the history list
+    if it is out of range, it will delete the first comman and add latest one.
+*/
 void add_CMD_to_History( char * last_command )
 {
     char * history[CMD_HISTORY_LIST];
@@ -179,25 +183,26 @@ void add_CMD_to_History( char * last_command )
         CMD_HISTORY_COUNT = CMD_HISTORY_COUNT + 1;
     }
     else {
-        free (history[1]);
+        CMD_HISTORY_COUNT = CMD_HISTORY_LIST;
+        free(history[1]);
         for (int index = 2; index <= CMD_HISTORY_LIST; index++)
         {
             history[index - 1] = history[index];
         }
         history[CMD_HISTORY_LIST] = last_command;
     }
+    
+    saveHistory(history, CMD_HISTORY_COUNT);
+}
 
-    if (CMD_HISTORY_COUNT < CMD_HISTORY_LIST)
-    {
-        for (int index = 1; index <= CMD_HISTORY_COUNT; index++)
-        {
-            printf("[%d] %c", index, history[index]);
-        }
-    }
-    else{
-        for (int index = 1; index <= CMD_HISTORY_LIST; index++)
-        {
-            printf("[%d] %c", index, history[index]);
-        }
-    }
+void showHistory()
+{
+    //char ** cmd_list = saveHistory();
+    
+}
+
+char ** saveHistory( char ** LIST_OF_CMD , int num_of_cmd ) 
+{
+    char ** cmd_list = LIST_OF_CMD;
+    return cmd_list;
 }
