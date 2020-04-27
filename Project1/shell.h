@@ -14,6 +14,7 @@
 #define FIRST_CMD_HISTORY 1 /**/
 int CMD_HISTORY_COUNT = 1; /* Counting the number of history in the list */
 
+char * history[CMD_HISTORY_LIST];
 
 int take_input(char * input_string){
     char * buffer_string = readline(">>");
@@ -112,7 +113,7 @@ int undefined_execute(char ** args_normal, int Num_of_CMD){
         break;
 
     case 4:
-        //add_CMD_to_History();
+        DisplayHistory();
         break;
 
     default:
@@ -175,34 +176,32 @@ int input_classification(char * input_string, char ** args_normal, char ** args_
 */
 void add_CMD_to_History( char * last_command )
 {
-    char * history[CMD_HISTORY_LIST];
-
+    if (strcmp(last_command, "!!") == 1)
+    {
+        last_command = history[CMD_HISTORY_COUNT];
+    }
+    
     if (CMD_HISTORY_COUNT < CMD_HISTORY_LIST)
     {
         history[CMD_HISTORY_COUNT] = last_command;
         CMD_HISTORY_COUNT = CMD_HISTORY_COUNT + 1;
     }
     else {
-        CMD_HISTORY_COUNT = CMD_HISTORY_LIST;
+        //CMD_HISTORY_COUNT = CMD_HISTORY_LIST;
         free(history[1]);
         for (int index = 2; index <= CMD_HISTORY_LIST; index++)
         {
             history[index - 1] = history[index];
         }
         history[CMD_HISTORY_LIST] = last_command;
+    } 
+}
+
+void DisplayHistory()
+{
+    for (int index = 1; index <= CMD_HISTORY_COUNT; index++)
+    {
+        printf("[%d]: %c\n", index, history[index]);
     }
     
-    saveHistory(history, CMD_HISTORY_COUNT);
-}
-
-void showHistory()
-{
-    //char ** cmd_list = saveHistory();
-    
-}
-
-char ** saveHistory( char ** LIST_OF_CMD , int num_of_cmd ) 
-{
-    char ** cmd_list = LIST_OF_CMD;
-    return cmd_list;
 }
