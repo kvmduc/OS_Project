@@ -5,7 +5,7 @@ int main(void){
     char * args_normal[MAX_LIST] = {};
     char * args_pipe[MAX_LIST] = {};
     int shouldrun = 1; /* flag to determine when to exit program */
-    int pipe;
+    int system_Num;
     do{
         printf("osh");
         fflush(stdout);
@@ -18,12 +18,18 @@ int main(void){
            continue;
         }
        
-        pipe = input_classification(input_string,args_normal,args_pipe);
-        if(pipe == 0){
+        system_Num = input_classification(input_string,args_normal,args_pipe);
+        if(system_Num == -1){
+            break;
+        }
+        if(system_Num == 0){
             shouldrun = osh_normal_execute(args_normal);
         }
-        if(pipe == 1){
-            /*Pipe() - Task 4*/
+        if(system_Num == 1){
+            //
+        }
+        if(system_Num == 2){
+            continue;
         }
     } while(shouldrun);
     return 0;
