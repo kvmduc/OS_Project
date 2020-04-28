@@ -9,12 +9,12 @@
 
 #define MAX_LINE 800 /* The maximum length command */
 #define MAX_LIST 100 /* The maximum length arg */
-#define CMD_LIST 5 /* Number of undefined arg */
+#define CMD_LIST 6 /* Number of undefined arg */
 #define CMD_HISTORY_LIST 10 /* Maximum numbers of command in history */
 #define FIRST_CMD_HISTORY 1 /**/
-int CMD_HISTORY_COUNT = 1; /* Counting the number of history in the list */
+int CMD_HISTORY_COUNT = 0; /* Counting the number of history in the list */
 
-char * history[CMD_HISTORY_LIST];
+char * history[CMD_HISTORY_LIST] = {};
 
 int take_input(char * input_string){
     char * buffer_string = readline(">>");
@@ -22,10 +22,19 @@ int take_input(char * input_string){
         return 0;
     }
     else{
-        add_history(buffer_string); //Neu ranh thi co the viet mot ham Overload !!!
-        add_CMD_to_History(buffer_string);
-        strcpy(input_string , buffer_string);
-        return 1;
+        if (strcmp(buffer_string, "!!") != 1 || strcmp(buffer_string,"!x") != 1)
+        {
+             //add_history(buffer_string); //Neu ranh thi co the viet mot ham Overload !!!
+            add_CMD_to_History(buffer_string); // Them command moi nhat vao history list (bao gom ca lenh history)
+            strcpy(input_string , buffer_string);
+            return 1;
+        }
+        else {
+            // //add_history(buffer_string); //Neu ranh thi co the viet mot ham Overload !!!
+            // add_CMD_to_History(buffer_string); // Them command moi nhat vao history list (bao gom ca lenh history)
+            // strcpy(input_string , buffer_string);
+            // return 1;
+        } 
     }
 }
 
@@ -104,8 +113,9 @@ int undefined_execute(char ** args_normal, int Num_of_CMD){
         "\n>exit"
         "\n>all other general commands available in UNIX shell"
         "\n>ONE pipe handling"
-        "\n>improper space handling\n"
-        "\n>history");
+        "\n>improper space handling"
+        "\n>history"
+        "\n!!\n");
         break;
 
     case 3:
@@ -113,7 +123,11 @@ int undefined_execute(char ** args_normal, int Num_of_CMD){
         break;
 
     case 4:
-        DisplayHistory();
+        DisplayHistory(); // Show history in shell
+        break;
+
+    case 5:
+        //getLastCommand();
         break;
 
     default:
@@ -130,6 +144,7 @@ int osh_normal_execute(char ** args_normal){
     list_of_cmd[2] = "help";
     list_of_cmd[3] = "exit";
     list_of_cmd[4] = "history";
+    list_of_cmd[5] = "!!";
 
     if(args_normal[0]==NULL){
         return 1; //Command empty;
@@ -176,32 +191,45 @@ int input_classification(char * input_string, char ** args_normal, char ** args_
 */
 void add_CMD_to_History( char * last_command )
 {
-    if (strcmp(last_command, "!!") == 1)
-    {
-        last_command = history[CMD_HISTORY_COUNT];
-    }
-    
-    if (CMD_HISTORY_COUNT < CMD_HISTORY_LIST)
+    if (CMD_HISTORY_COUNT < CMD_HISTORY_LIST) //Numbers of CMD < 10
     {
         history[CMD_HISTORY_COUNT] = last_command;
         CMD_HISTORY_COUNT = CMD_HISTORY_COUNT + 1;
     }
     else {
         //CMD_HISTORY_COUNT = CMD_HISTORY_LIST;
-        free(history[1]);
-        for (int index = 2; index <= CMD_HISTORY_LIST; index++)
+        free(history[0]);
+        for (int index = 1; index < CMD_HISTORY_LIST; index++)
         {
             history[index - 1] = history[index];
         }
         history[CMD_HISTORY_LIST] = last_command;
-    } 
+    }
 }
 
 void DisplayHistory()
 {
-    for (int index = 1; index <= CMD_HISTORY_COUNT; index++)
+    for (int index = 0; index < CMD_HISTORY_COUNT; index++)
     {
-        printf("[%d]: %c\n", index, history[index]);
+        printf("[%d]: %s\n", index + 1, history[index]);
     }
-    
+}
+
+void getLastCommand( char * buffer_string )
+{
+    if (CMD_HISTORY_COUNT == 0)
+    {
+        printf("No command in history");
+    }
+    else {
+        if (strcmp(buffer_string,"!!") == 1)
+        {
+            buffer_string = history[CMD_HISTORY_COUNT];
+        }
+        if (strcmp(buffer_string,"!x") == 1)
+        {
+            // Get index history   
+        } 
+    }
+    add_CMD_to_History(buffer_string);
 }
