@@ -22,18 +22,24 @@ int take_input(char * input_string){
         return 0;
     }
     else{
-        if (strcmp(buffer_string, "!!") != 1 || strcmp(buffer_string,"!x") != 1)
+        if (strcmp(buffer_string, "!!") == 0)
         {
-             //add_history(buffer_string); //Neu ranh thi co the viet mot ham Overload !!!
+            if (CMD_HISTORY_COUNT == 0)
+            {
+                printf("No commands in history !!!\n");
+                return 0;
+            }
+            else {
+                strcpy(buffer_string, history);
+                add_CMD_to_History(buffer_string);
+                return 1;
+            }
+        }
+        else {
+            //add_history(buffer_string); //Neu ranh thi co the viet mot ham Overload !!!
             add_CMD_to_History(buffer_string); // Them command moi nhat vao history list (bao gom ca lenh history)
             strcpy(input_string , buffer_string);
             return 1;
-        }
-        else {
-            // //add_history(buffer_string); //Neu ranh thi co the viet mot ham Overload !!!
-            // add_CMD_to_History(buffer_string); // Them command moi nhat vao history list (bao gom ca lenh history)
-            // strcpy(input_string , buffer_string);
-            // return 1;
         } 
     }
 }
@@ -115,7 +121,7 @@ int undefined_execute(char ** args_normal, int Num_of_CMD){
         "\n>ONE pipe handling"
         "\n>improper space handling"
         "\n>history"
-        "\n!!\n");
+        "\n>!!\n");
         break;
 
     case 3:
@@ -213,23 +219,4 @@ void DisplayHistory()
     {
         printf("[%d]: %s\n", index + 1, history[index]);
     }
-}
-
-void getLastCommand( char * buffer_string )
-{
-    if (CMD_HISTORY_COUNT == 0)
-    {
-        printf("No command in history");
-    }
-    else {
-        if (strcmp(buffer_string,"!!") == 1)
-        {
-            buffer_string = history[CMD_HISTORY_COUNT];
-        }
-        if (strcmp(buffer_string,"!x") == 1)
-        {
-            // Get index history   
-        } 
-    }
-    add_CMD_to_History(buffer_string);
 }
