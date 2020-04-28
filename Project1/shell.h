@@ -9,7 +9,7 @@
 
 #define MAX_LINE 800 /* The maximum length command */
 #define MAX_LIST 100 /* The maximum length arg */
-#define CMD_LIST 6 /* Number of undefined arg */
+#define CMD_LIST 7 /* Number of undefined arg */
 #define CMD_HISTORY_LIST 10 /* Maximum numbers of command in history */
 #define FIRST_CMD_HISTORY 1 /**/
 int CMD_HISTORY_COUNT = 0; /* Counting the number of history in the list */
@@ -30,17 +30,25 @@ int take_input(char * input_string){
                 return 0;
             }
             else {
-                strcpy(buffer_string, history);
+                buffer_string = history[CMD_HISTORY_COUNT - 1];
                 add_CMD_to_History(buffer_string);
                 return 1;
             }
         }
         else {
-            //add_history(buffer_string); //Neu ranh thi co the viet mot ham Overload !!!
-            add_CMD_to_History(buffer_string); // Them command moi nhat vao history list (bao gom ca lenh history)
-            strcpy(input_string , buffer_string);
-            return 1;
-        } 
+            if (strlen(buffer_string) == strlen("!x"))
+            {
+                buffer_string = x_execute(buffer_string);
+                add_CMD_to_History(buffer_string);
+                return 1;
+            }
+            else {
+                //add_history(buffer_string); //Neu ranh thi co the viet mot ham Overload !!!
+                add_CMD_to_History(buffer_string); // Them command moi nhat vao history list (bao gom ca lenh history)
+                strcpy(input_string , buffer_string);
+                return 1;
+            } 
+        }  
     }
 }
 
@@ -120,7 +128,7 @@ int undefined_execute(char ** args_normal, int Num_of_CMD){
         "\n>all other general commands available in UNIX shell"
         "\n>ONE pipe handling"
         "\n>improper space handling"
-        "\n>history"
+        "\n>history (!!, !x)"
         "\n>!!\n");
         break;
 
@@ -133,7 +141,6 @@ int undefined_execute(char ** args_normal, int Num_of_CMD){
         break;
 
     case 5:
-        //getLastCommand();
         break;
 
     default:
@@ -150,7 +157,8 @@ int osh_normal_execute(char ** args_normal){
     list_of_cmd[2] = "help";
     list_of_cmd[3] = "exit";
     list_of_cmd[4] = "history";
-    list_of_cmd[5] = "!!";
+    //list_of_cmd[5] = "!!";
+    list_of_cmd[6] = "!x";
 
     if(args_normal[0]==NULL){
         return 1; //Command empty;
@@ -219,4 +227,28 @@ void DisplayHistory()
     {
         printf("[%d]: %s\n", index + 1, history[index]);
     }
+}
+
+/* Definition for command !x */
+char * x_execute( char * buffer )
+{
+    char * result;
+    char * cmd_partition[2];
+    cmd_partition[0] = strtok(buffer, "!");
+    if (cmd_partition[0] == NULL)
+    {
+        return 0;
+    }
+    else{
+        int temp = atoi(cmd_partition[1]);
+        if (temp <= 0 || temp > 10)
+        {
+            printf("Out of history range!\n");
+        }
+        else {
+            result = history[temp - 1]; //Replace current !x with the history at index
+        }
+    }
+    
+    return result;
 }
