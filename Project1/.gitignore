@@ -4,3 +4,6 @@
 # Standard bin/obj
 bin
 obj
+
+# The executable itself
+shell
