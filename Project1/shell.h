@@ -6,6 +6,7 @@
 #include <sys/wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <inttypes.h>
 
 #define MAX_LINE 800 /* The maximum length command */
 #define MAX_LIST 100 /* The maximum length arg */
@@ -226,10 +227,15 @@ void DisplayHistory()
 /* Definition for command !n */
 int exec_x( char* buffer )
 {
+    char number[100] = {};
+    for (int index = 0; index < strlen(buffer) - 1; index++)
+    {
+        number[index] = buffer[index + 1];
+    }
     // Get the number next to the exclamamtion mark (!) to execute
     // Check if the number is in the list range
     // Get the command which has the same index (in array definition 0->9) to execute and send to the history
-    int partition = atoi(&buffer[1]); // Need update!!
+    int partition = atoi(number); // Need update!!
     if (partition < 1 || partition > 10)
     {
         printf("Out of history range!");
