@@ -137,9 +137,6 @@ int undefined_execute(char ** args_normal, int Num_of_CMD){
         DisplayHistory(); // Show history in shell
         break;
 
-    case 5:
-        break;
-
     default:
         break;
     }
@@ -155,7 +152,7 @@ int osh_normal_execute(char ** args_normal){
     list_of_cmd[3] = "exit";
     list_of_cmd[4] = "history";
     //list_of_cmd[5] = "!!";
-    list_of_cmd[6] = "!x";
+    //list_of_cmd[6] = "!x";
 
     if(args_normal[0]==NULL){
         return 1; //Command empty;
@@ -214,7 +211,7 @@ void add_CMD_to_History( char * last_command )
         {
             history[index - 1] = history[index];
         }
-        history[CMD_HISTORY_LIST] = last_command;
+        history[CMD_HISTORY_LIST - 1] = last_command;
     }
 }
 
@@ -226,10 +223,13 @@ void DisplayHistory()
     }
 }
 
-/* Definition for command !x */
+/* Definition for command !n */
 int exec_x( char* buffer )
 {
-    int partition = atoi(&buffer[1]);
+    // Get the number next to the exclamamtion mark (!) to execute
+    // Check if the number is in the list range
+    // Get the command which has the same index (in array definition 0->9) to execute and send to the history
+    int partition = atoi(&buffer[1]); // Need update!!
     if (partition < 1 || partition > 10)
     {
         printf("Out of history range!");
