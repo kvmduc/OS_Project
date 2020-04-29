@@ -31,24 +31,21 @@ int take_input(char * input_string){
             }
             else {
                 buffer_string = history[CMD_HISTORY_COUNT - 1];
-                add_CMD_to_History(buffer_string);
-                return 1;
+                printf("%s\n", buffer_string);
             }
         }
         else {
-            if (strlen(buffer_string) == strlen("!x"))
+            if (strncmp(buffer_string, "!n", 3) == -1)
             {
-                buffer_string = x_execute(buffer_string);
-                add_CMD_to_History(buffer_string);
-                return 1;
-            }
-            else {
-                //add_history(buffer_string); //Neu ranh thi co the viet mot ham Overload !!!
-                add_CMD_to_History(buffer_string); // Them command moi nhat vao history list (bao gom ca lenh history)
-                strcpy(input_string , buffer_string);
-                return 1;
+                if (exec_x(buffer_string) == 1)
+                {
+                    printf("%s\n", buffer_string);
+                }
             } 
         }  
+        add_CMD_to_History(buffer_string);
+        strcpy(input_string, buffer_string);
+        return 1;
     }
 }
 
@@ -230,25 +227,17 @@ void DisplayHistory()
 }
 
 /* Definition for command !x */
-char * x_execute( char * buffer )
+int exec_x( char* buffer )
 {
-    char * result;
-    char * cmd_partition[2];
-    cmd_partition[0] = strtok(buffer, "!");
-    if (cmd_partition[0] == NULL)
+    int partition = atoi(&buffer[1]);
+    if (partition < 1 || partition > 10)
     {
+        printf("Out of history range!");
         return 0;
     }
-    else{
-        int temp = atoi(cmd_partition[1]);
-        if (temp <= 0 || temp > 10)
-        {
-            printf("Out of history range!\n");
-        }
-        else {
-            result = history[temp - 1]; //Replace current !x with the history at index
-        }
+    else {
+        // buffer = history[partition - 1];
+        strcpy(buffer, history[partition - 1]);
     }
-    
-    return result;
+    return 1;
 }
