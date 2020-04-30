@@ -240,13 +240,6 @@ int input_classification(char * input_string, char ** args_normal, char ** args_
             }
             break;
         case 4:
-            /*if ((fout = open("outfile4", O_WRONLY | O_CREAT | O_TRUNC, 0600))== -1){
-                perror("open outfile");
-                exit(3);
-            }
-            close(fileno(stdout));
-            dup(fout);*/
-
             /* redirect stderr */
             switch (kidpid = fork()) {
             case -1: perror("fork"); abort();
@@ -282,4 +275,44 @@ int input_classification(char * input_string, char ** args_normal, char ** args_
         }
         return 2;
     }
+}
+int osh_piped_execute(char ** args_normal, char** args_pipe){
+    int fd[2];
+    pid_t p1, p2;
+    if(pipe(fd) < 0){
+        perror("can't pipe")
+    }
+    p1=fork();
+    if (p1<0){
+        printf("\n Could not fork");
+        return;
+    }
+    if(p1==0){
+        close(fd[0]);
+        dup2(fd[1],1);
+        close(fd[1]);
+        if(execvp(args_normal[0],args_normal)<0){
+            printf("\n Could not execute command 1");
+            exit(0);
+        }
+    }else {
+        p2=fork();
+        if(p2<0){
+            printf("\n Could not fork");
+            return;
+        }    
+        if(p2==0){
+            close(fd[1]);
+            dup2(fd[0],0);
+            close(fd[0]);
+            if(execvp(args_pipe[0],args_pipe)<0){
+                printf("\n Could not execute command 2");
+                exit(0);
+            }
+        }else{
+            wait(NULL);
+            wait(NULL);
+        }
+    }
+    return 0;
 }

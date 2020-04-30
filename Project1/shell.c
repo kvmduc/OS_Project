@@ -26,7 +26,7 @@ int main(void){
             shouldrun = osh_normal_execute(args_normal);
         }
         if(system_Num == 1){
-            //
+            shouldrun = osh_piped_execute(args_normal, args_pipe);
         }
         if(system_Num == 2){
             continue;
