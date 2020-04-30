@@ -90,9 +90,9 @@ int defined_execute(char ** args_normal, int background){
         }
         exit(EXIT_FAILURE);
     } 
-    else if (pid < 0) {
-        perror("osh");
-    } 
+    // else if (pid < 0) {
+    //     perror("osh");
+    // } 
     else {
         //fork() thanh cong
         // do {
@@ -131,11 +131,11 @@ int undefined_execute(char ** args_normal, int Num_of_CMD){
         "\n>hello"
         "\n>cd"
         "\n>exit"
+        "\nclear"
         "\n>all other general commands available in UNIX shell"
         "\n>ONE pipe handling"
         "\n>improper space handling"
-        "\n>history (!!, !x)"
-        "\n>!!\n");
+        "\n>history (!!, !x)\n");
         break;
 
     case 3:
@@ -144,6 +144,10 @@ int undefined_execute(char ** args_normal, int Num_of_CMD){
 
     case 4:
         DisplayHistory(); // Show history in shell
+        break;
+
+    case 5:
+        clearScreen();
         break;
 
     default:
@@ -160,6 +164,7 @@ int osh_normal_execute(char ** args_normal, int background){
     list_of_cmd[2] = "help";
     list_of_cmd[3] = "exit";
     list_of_cmd[4] = "history";
+    list_of_cmd[5] = "clear";
     //list_of_cmd[5] = "!!";
     //list_of_cmd[6] = "!x";
 
@@ -254,4 +259,9 @@ int exec_x( char* buffer )
         strcpy(buffer, history[partition - 1]);
     }
     return 1;
+}
+
+void clearScreen()
+{
+    system("clear");
 }
