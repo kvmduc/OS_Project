@@ -9,8 +9,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-#define MAX_LINE 800 /* The maximum length command */
-#define MAX_LIST 100 /* The maximum length arg */
+#define MAX_LINE 400 /* The maximum length command */
+#define MAX_LIST 50 /* The maximum length arg */
 #define CMD_LIST 4 /* Number of undefined arg */
 
  
