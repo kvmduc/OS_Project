@@ -58,11 +58,10 @@ void parse_space(char * str_with_space, char ** parsed){
 
 }
 
-int defined_execute(char ** args_normal){
+int defined_execute(char ** args_normal, int background){
     pid_t pid, wpid;
     int status;
     pid = fork();
-
     if (pid == 0) {
         // child process
         if (execvp(args_normal[0], args_normal) == -1) {
@@ -75,12 +74,17 @@ int defined_execute(char ** args_normal){
     } 
     else {
         //fork() thanh cong
-        do {
-            wpid = waitpid(pid, &status, WUNTRACED);
-            //wpid = wait(&status);
-        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+        if(background == 1){
+            //do {
+                //wpid = waitpid(pid, &status, WUNTRACED);
+                wpid = waitpid(pid, &status, WNOHANG); //from GITHUB
+                //wpid = wait(&status); TEST
+            //} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+        }
+        else if(background == 0){
+            wpid = waitpid(pid, &status, 0);
+        }
   }
-
   return 1;
 }
 
@@ -117,7 +121,7 @@ int undefined_execute(char ** args_normal, int Num_of_CMD){
     return 1;
 }
 
-int osh_normal_execute(char ** args_normal){
+int osh_normal_execute(char ** args_normal, int background){
     char * list_of_cmd[CMD_LIST]; //Mot so command duoc build truc tiep tren shell chu khong duoc build thanh mot chuong trinh, nen phai tu dinh nghia
 
     list_of_cmd[0] = "hello";
@@ -133,7 +137,7 @@ int osh_normal_execute(char ** args_normal){
             return undefined_execute(args_normal, i);
         }
     }
-    return defined_execute(args_normal);
+    return defined_execute(args_normal, background);
 }
 
 
