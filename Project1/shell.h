@@ -284,7 +284,7 @@ int osh_piped_execute(char ** args_normal, char** args_pipe){
     int fd[2];
     pid_t p1, p2;
     if(pipe(fd) < 0){
-        perror("can't pipe")
+        perror("can't pipe");
     }
     p1=fork();
     if (p1<0){
@@ -314,9 +314,10 @@ int osh_piped_execute(char ** args_normal, char** args_pipe){
                 exit(0);
             }
         }else{
+            close(fd[1]);
             wait(NULL);
             wait(NULL);
         }
     }
-    return 0;
+    return 1;
 }

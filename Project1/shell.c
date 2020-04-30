@@ -31,16 +31,11 @@ int main(void){
         if(system_Num == -1){
             break;
         }
-        if(system_Num == 0){
+        else if(system_Num == 0){
             shouldrun = osh_normal_execute(args_normal, background);
         }
-<<<<<<< HEAD
-        if(system_Num == 1){
-            shouldrun = osh_piped_execute(args_normal, args_pipe);
-=======
         else if(system_Num == 1){
-            //
->>>>>>> 61240d4ab4726236d96899e5d03d1e6b867467b9
+            shouldrun = osh_piped_execute(args_normal, args_pipe);
         }
         else if(system_Num == 2){
             continue;
