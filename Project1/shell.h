@@ -92,7 +92,7 @@ int undefined_execute(char ** args_normal, int Num_of_CMD){
     switch (Num_of_CMD)
     {
     case 0:
-        printf("This is MacMeEmDi 's Terminal !!! \n"
+        printf("This is Kieu Vu Minh Duc & friends 's Terminal !!! \n"
         "Wanna play safe ? \n"
         "Go get help with \"help\" command \n"
         );
