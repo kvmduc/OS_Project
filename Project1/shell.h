@@ -42,10 +42,19 @@ int take_input(char * input_string){
         else {
             if (strncmp(buffer_string, "!n", 3) == -1)
             {
-                if (exec_x(buffer_string) == 1)
+                if (CMD_HISTORY_COUNT == 0)
+                {
+                    printf("No commands in history !!!\n");
+                    return 0;
+                }
+                else if (exec_x(buffer_string) == 1)
                 {
                     printf("%s\n", buffer_string);
                 }
+                else if (exec_x(buffer_string) == 0) {
+                    printf("Out of history range!\n");
+                    return 0;
+                }   
             } 
         }  
         add_CMD_to_History(buffer_string);
@@ -143,7 +152,7 @@ int undefined_execute(char ** args_normal, int Num_of_CMD){
         break;
 
     case 5:
-        clearScreen();
+        clearScreen(); // Clean terminal
         break;
 
     default:
@@ -399,9 +408,8 @@ int exec_x( char* buffer )
     // Check if the number is in the list range
     // Get the command which has the same index (in array definition 0->9) to execute and send to the history
     int partition = atoi(number); // Need update!!
-    if (partition < 1 || partition > 10)
+    if ((partition < 1 || partition > 10) || partition > CMD_HISTORY_COUNT)
     {
-        printf("Out of history range!");
         return 0;
     }
     else {
