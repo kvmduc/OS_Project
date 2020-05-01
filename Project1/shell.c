@@ -19,7 +19,6 @@ int main(void){
         if(take_input(input_string) == 0){
            continue;
         }
-
         if(strstr(input_string,"&") != NULL){ // Tim kiem Ampersand
             strncpy(input_string_temp,input_string, strlen(input_string) - 1);
             strcpy(input_string,input_string_temp);
