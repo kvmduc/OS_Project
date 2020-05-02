@@ -11,7 +11,7 @@
 
 #define MAX_LINE 400 /* The maximum length command */
 #define MAX_LIST 50 /* The maximum length arg */
-#define CMD_LIST 7 /* Number of undefined arg */
+#define CMD_LIST 6 /* Number of undefined arg */
 #define CMD_HISTORY_LIST 10 /* Maximum numbers of command in history */
 #define FIRST_CMD_HISTORY 1 /**/
 int CMD_HISTORY_COUNT = 0; /* Counting the number of history in the list */
@@ -24,7 +24,7 @@ int take_input(char * input_string){
         return 0;
     }
     else{
-        //add_history(buffer_string); //Neu ranh thi co the viet mot ham Overload !!!
+        add_history(buffer_string); //Neu ranh thi co the viet mot ham Overload !!!
         strcpy(input_string , buffer_string);
 
         if (strcmp(buffer_string, "!!") == 0)
@@ -148,7 +148,7 @@ int undefined_execute(char ** args_normal, int Num_of_CMD){
 
 
     case 4:
-        DisplayHistory(); // Show history in shell
+        //DisplayHistory(); // Show history in shell
         break;
 
     case 5:
@@ -417,7 +417,6 @@ int exec_x( char* buffer )
     }
     return 1;
 }
-
 void clearScreen()
 {
     system("clear");
