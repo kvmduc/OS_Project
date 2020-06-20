@@ -4,7 +4,7 @@
 #include <linux/kernel.h> 
 #include <linux/fs.h>
 #include <linux/random.h>
-#include <asm/uaccess.h>
+#include <linux/uaccess.h>
 #define DEVICE_NAME "RANDOMDevice" 
 #define CLASS_NAME "RANDOM"      
 
@@ -26,9 +26,7 @@ static struct file_operations fops =
 static int majorNumber;
 static struct class *randomClass = NULL;   
 static struct device *randomDevice = NULL;
-static long long int randomNumber;
-static char temp[20] = {'\0'};
-static char rev_temp[20] = {'\0'};
+static int randomNum;
 
 static int __init RANDOMDevice_init(void) {
     //dang ky major number
@@ -76,43 +74,13 @@ static int random_open(struct inode *inodep, struct file *filep ){
 }
 
 static ssize_t random_read(struct file *filep, char *buffer, size_t len, loff_t *off){
-	int i = 0;
-    get_random_bytes(&randomNumber, sizeof(int));
-    printk(KERN_INFO "RANDOMDevice : Random number is %lld\n", randomNumber);
-    if(randomNumber < 0){
-    	randomNumber *= -1;
-    }
-    //printk(KERN_INFO "AFTER CHECK POSTIVE : Random number is %lld \n", randomNumber);
-    int length = 0;
-    while(randomNumber >0) {
-    	temp[i] = randomNumber %10 + '0';
-    	randomNumber/=10;
-    	i++;
-    	if(temp[i] != ""){
-    		length++;
-    	}
-    }
-    int ti = 0;
-    for (ti; ti < 20; ti++) {
-    	printk(KERN_INFO "rdtempt [%d] = %c\n", ti, temp[ti]);
-    }
-    //printk(KERN_INFO "length = %d",len);
-    ti = 0;
-    int index = length;
-    /*if(flag == 0){
-    	for(index; index >=0; index--){
-    		rev_temp[index] = temp[ti++];
-    	}
-    	rev_temp[index] = "-";
-    }
-    else{*/
-    	for(index--; index >=0; index--){
-    		rev_temp[index] = temp[ti++];
-    	}
-    //}
-    rev_temp[length] = '\0';
-    
-    raw_copy_to_user(buffer,rev_temp,length);
+	get_random_bytes(&randomNum,sizeof(int));
+	printk(KERN_INFO "RANDOMDevice : Random number is %d\n", randomNum);
+    if (copy_to_user(buffer,&randomNum,sizeof(randomNum)) != 0 )
+    {
+        printk(KERN_INFO "Kernel -> userspace copy failed!\n" );
+        return 13;
+    }   
     return 0;
 }
 

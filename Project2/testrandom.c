@@ -4,9 +4,7 @@
 #include<fcntl.h>
 #include<string.h>
 #include<unistd.h>
-#define BUFFER_LENGTH 20
-static char receive[BUFFER_LENGTH] = {'\0'}; 
-
+static int receive;
 int main(){
 	int ret, fd;
 	fd = open("/dev/RANDOMDevice",O_RDWR);
@@ -16,13 +14,13 @@ int main(){
 	}
 
 	printf("\nReading from Device \n");
-	ret = read(fd,receive,BUFFER_LENGTH);
+	ret = read(fd,&receive,sizeof(receive));
 	if(ret < 0){
 		printf("\nFailed !!!\n");
 		return errno;
 	}
 	else{
-		printf("Random Number is %s \n", receive);
+		printf("Random Number is %d \n", receive);
 	}
 	return 0;
 }
